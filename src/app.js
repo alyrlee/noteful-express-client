@@ -1,108 +1,40 @@
-import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import NoteListNav from '../NoteListNav/NoteListNav';
-import NotePageNav from '../NotePageNav/NotePageNav';
-import NoteListMain from '../NoteListMain/NoteListMain';
-import NotePageMain from '../NotePageMain/NotePageMain';
-import dummyStore from '../dummy-store';
-import {getNotesForFolder, findNote, findFolder} from '../notes-helpers';
-import './App.css';
+require('dotenv').config();
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const helmet = require('helmet');
+const {NODE_ENV} = require('./config');
+const foldersRouter = require('./folders/folders-router');
+const notesRouter = require('./notes/notes-router');
 
-class App extends Component {
-    state = {
-        notes: [],
-        folders: []
-    };
+const app = express();
 
-    componentDidMount() {
-        // fake date loading from API call
-        setTimeout(() => this.setState(dummyStore), 600);
+const morganOption = (NODE_ENV === 'production')
+  ? 'tiny'
+  : 'common';
+
+app.use(morgan(morganOption));
+app.use(helmet());
+app.use(cors());
+
+app.use('/api/folders', foldersRouter);
+app.use('/api/notes', notesRouter);
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the Noteful API!')
+});
+
+app.use(function errorHandler(error, req, res, next) {
+    let response;
+
+    if (NODE_ENV === 'production') {
+        response = { error: {message: 'server error.'}};
     }
-
-    renderNavRoutes() {
-        const {notes, folders} = this.state;
-        return (
-            <>
-                {['/', '/folder/:folderId'].map(path => (
-                    <Route
-                        exact
-                        key={path}
-                        path={path}
-                        render={routeProps => (
-                            <NoteListNav
-                                folders={folders}
-                                notes={notes}
-                                {...routeProps}
-                            />
-                        )}
-                    />
-                ))}
-                <Route
-                    path="/note/:noteId"
-                    render={routeProps => {
-                        const {noteId} = routeProps.match.params;
-                        const note = findNote(notes, noteId) || {};
-                        const folder = findFolder(folders, note.folderId);
-                        return <NotePageNav {...routeProps} folder={folder} />;
-                    }}
-                />
-                <Route path="/add-folder" component={NotePageNav} />
-                <Route path="/add-note" component={NotePageNav} />
-            </>
-        );
+    else {
+        console.error(error);
+        response = {message: error.message, error};
     }
+    res.status(500).json(response);
+});
 
-    renderMainRoutes() {
-        const {notes, folders} = this.state;
-        return (
-            <>
-                {['/', '/folder/:folderId'].map(path => (
-                    <Route
-                        exact
-                        key={path}
-                        path={path}
-                        render={routeProps => {
-                            const {folderId} = routeProps.match.params;
-                            const notesForFolder = getNotesForFolder(
-                                notes,
-                                folderId
-                            );
-                            return (
-                                <NoteListMain
-                                    {...routeProps}
-                                    notes={notesForFolder}
-                                />
-                            );
-                        }}
-                    />
-                ))}
-                <Route
-                    path="/note/:noteId"
-                    render={routeProps => {
-                        const {noteId} = routeProps.match.params;
-                        const note = findNote(notes, noteId);
-                        return <NotePageMain {...routeProps} note={note} />;
-                    }}
-                />
-            </>
-        );
-    }
-
-    render() {
-        return (
-            <div className="App">
-                <nav className="App__nav">{this.renderNavRoutes()}</nav>
-                <header className="App__header">
-                    <h1>
-                        <Link to="/">Noteful</Link>{' '}
-                        <FontAwesomeIcon icon="check-double" />
-                    </h1>
-                </header>
-                <main className="App__main">{this.renderMainRoutes()}</main>
-            </div>
-        );
-    }
-}
-
-export default App;
+module.exports = app;
