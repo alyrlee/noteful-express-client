@@ -37,4 +37,8 @@ app.use(function errorHandler(error, req, res, next) {
     res.status(500).json(response);
 });
 
+<<<<<<< HEAD
 module.exports = app;
+=======
+module.exports = app;
+>>>>>>> ccebab2... updated app.js to conect with end points and db

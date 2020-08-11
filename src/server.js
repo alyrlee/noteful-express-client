@@ -7,7 +7,7 @@ const db = knex({
   client: 'pg',
   connection: DATABASE_URL
 });
-
+console.log('knex and driver installed correctly');
 app.set('db', db);
 
 app.listen(PORT, () => {
