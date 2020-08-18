@@ -3,7 +3,7 @@ const express = require('express')
 const xss = require('xss')
 const FoldersService = require('./folders-service')
 
-const folderRouter = express.Router()
+const foldersRouter = express.Router()
 const jsonParser = express.json()
 
 const serializeFolders = folders => ({
@@ -14,7 +14,7 @@ const serializeFolders = folders => ({
   date_modified: folder.date_modified,
 })
 
-folderRouter
+foldersRouter
   .route('/')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db')
@@ -42,7 +42,7 @@ folderRouter
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${folder.id}`))
-          .json(serializeFolder(folder)
+          .json(serializeFolder(folder))
       })
       .catch(next)
   })

@@ -17,7 +17,7 @@ const serializeNotes = notes => ({
 notesRouter
   .route('/')
   .get((req, res, next) => {
-    const knexInstance = req.app.get('db'
+    const knexInstance = req.app.get('db')
     NotesService.getAllNotes(knexInstance)
       .then(notes => {
         res.json(notes.map(serializeNote))
@@ -42,7 +42,7 @@ notesRouter
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${note.id}`))
-          .json(serializeNote(note)
+          .json(serializeNote(note))
       })
       .catch(next)
   })
