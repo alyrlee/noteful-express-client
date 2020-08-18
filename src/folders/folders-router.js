@@ -14,12 +14,12 @@ const serializeFolders = folders => ({
   date_modified: folder.date_modified,
 })
 
-folderssRouter
+folderRouter
   .route('/')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db'
     FoldersService.getAllFolders(knexInstance)
-      .then(folderss => {
+      .then(folders => {
         res.json(folders.map(serializeFolder))
       })
       .catch(next)
