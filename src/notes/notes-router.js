@@ -6,7 +6,7 @@ const NotesService = require('./notes-service')
 const notesRouter = express.Router()
 const jsonParser = express.json()
 
-const serializeNotes = notes => ({
+const serializeNote = notes => ({
   id: note.id,
   style: note.style,
   title: xss(note.title), 
