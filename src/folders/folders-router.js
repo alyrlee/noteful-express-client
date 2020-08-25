@@ -8,8 +8,7 @@ const jsonParser = express.json()
 
 const serializeFolder = folder => ({
   id: folder.id,
-  style: folder.style,
-  title: xss(folder.title), 
+  name: folder.name,
   content: xss(folder.content),
   date_modified: folder.date_modified,
 })
@@ -25,8 +24,8 @@ foldersRouter
       .catch(next)
   })
   .post(jsonParser, (req, res, next) => {
-    const { title, content, style } = req.body
-    const newFolder = { title, content, style }
+    const {folder_id, name, content, modified } = req.body
+    const newFolder = { folder_id, name, content, modified }
 
     for (const [key, value] of Object.entries(newFolder))
       if (value == null)
@@ -79,8 +78,8 @@ foldersRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) => {
-    const { title, content, style } = req.body
-    const folderToUpdate = { title, content, style }
+    const {folder_id, name, content, modified } = req.body
+    const folderToUpdate = { folder_id, name, content, modified }
 
     const numberOfValues = Object.values(folderToUpdate).filter(Boolean).length
     if (numberOfValues === 0)
