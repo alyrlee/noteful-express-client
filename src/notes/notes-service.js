@@ -2,7 +2,7 @@ const NotesService = {
     getAllNotes(knex) {
       return knex.select('*').from('notes')
     },
-    insertArticle(knex, newNote) {
+    insertNote(knex, newNote) {
       return knex
         .insert(newNote)
         .into('notes')
