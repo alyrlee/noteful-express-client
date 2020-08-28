@@ -78,14 +78,14 @@ foldersRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) => {
-    const {folder_id, name, content, modified } = req.body
-    const folderToUpdate = { folder_id, name, content, modified }
+    const { folder_name } = req.body
+    const folderToUpdate = { folder_name}
 
     const numberOfValues = Object.values(folderToUpdate).filter(Boolean).length
     if (numberOfValues === 0)
       return res.status(400).json({
         error: {
-          message: `Request body must content either 'title', 'style' or 'content'`
+          message: `Request body must content either 'name'`
         }
       })
 

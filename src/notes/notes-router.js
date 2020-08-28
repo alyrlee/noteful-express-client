@@ -24,8 +24,8 @@ notesRouter
       .catch(next)
   })
   .post(jsonParser, (req, res, next) => {
-    const { note_name: newNoteName } = req.body
-    const newNote = { note_name: newNoteName  }
+    const { folder_id, name, modified, content} = req.body
+    const newNote = { folder_id, name, modified, content  }
 
     for (const [key, value] of Object.entries(newNote))
       if (value == null)
@@ -78,14 +78,14 @@ notesRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) => {
-    const { note_id, name, content, modified  } = req.body
-    const noteToUpdate = { note_id, name, content, modified  }
+    const {name, folder_id, content} = req.body;
+        const noteToUpdate = {name, folder_id, content};
 
     const numberOfValues = Object.values(noteToUpdate).filter(Boolean).length
     if (numberOfValues === 0)
       return res.status(400).json({
         error: {
-          message: `Request body must content either 'title', 'style' or 'content'`
+          message: `Request body must content either 'name', 'folder' or 'content'`
         }
       })
 
