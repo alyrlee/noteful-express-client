@@ -8,7 +8,7 @@ const jsonParser = express.json();
 
 const serializeFolder = folder => ({
     id: folder.id, 
-    folder_name: xss(folder.folder_name)
+    folder_name: xss(folder.folder_name),
 });
 
 foldersRouter 
@@ -23,14 +23,16 @@ foldersRouter
             .catch(next);
     }) 
     .post(jsonParser, (req, res, next) => {
-        const {folder_name: newFolderName} = req.body;
-        const newFolder = {folder_name: newFolderName};
+        const { folder_name } = req.body;
+        console.log(folder_name);
+        const newFolder = { folder_name };
+        console.log(newFolder);
 
-        for (const [value] of Object.entries(newFolder)) {
+        for (const [key, value] of Object.entries(newFolder)) {
             if (value == null) {
-                // return res.status(400).json({
-                //     error: {message: `Missing '${key}' in request body.`}
-                // });
+                return res.status(400).json({
+                    error: {message: `Missing '${key}' in request body.`}
+                });
             }
         }
 
@@ -60,14 +62,13 @@ foldersRouter
                         error: {message: `Folder does not exist.`}
                     });
                 }
-
                 res.folder = folder;
                 next();
             })
             .catch(next);
     })
     .get((req, res, next) => {
-        res.json(res.folder);
+        res.json(serializeFolder(res.folder));
     })
     .delete((req, res, next) => {
         FoldersService.deleteFolder(
@@ -92,7 +93,7 @@ foldersRouter
         }
 
         FoldersService.updateFolder(
-            req.app.get('db'),
+            req.app.patch.get('db'),
             req.params.folder_id,
             folderToUpdate
         )

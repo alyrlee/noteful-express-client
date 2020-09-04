@@ -10,7 +10,7 @@ const serializeNotes = note => ({
     id: note.id,
     folder_id: note.folder_id,
     name: xss(note.name),
-    modified: note.modified,
+    // date_modified: note.date_modified,
     content: xss(note.content)
 });
 
@@ -26,8 +26,8 @@ notesRouter
             .catch(next);
     })
     .post(jsonParser, (req, res, next) => {
-        const {folder_id, name, modified, content} = req.body;
-        const newNote = {folder_id, name, modified, content};
+        const {folder_id, name, content} = req.body;
+        const newNote = {folder_id, name, content};
 
         for (const[value] of Object.entries(newNote)) {
             if (value == null) {
