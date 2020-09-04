@@ -1,5 +1,5 @@
-INSERT INTO notes (name, folderId, content)
-    VALUES
+INSERT INTO notes (name, folder_Id, content)   
+   VALUES
     ('Wash Dishes', 1, 'Wash dishes for before the cafe opens again tomorrow'),
     ('Morgana"s Birthday Party', 3, 'Morgana wants to go to sushi for their birthday on May 24th at 7:00 PM.'),
     ('Memorial Day', 6, 'Memorial Day is Monday May 25th, 2020.'),

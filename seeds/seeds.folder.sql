@@ -1,4 +1,4 @@
-INSERT INTO folders ( name )
+INSERT INTO folders ( folder_name )
     VALUES 
         ('To-Do'),
         ('Reminders'),
