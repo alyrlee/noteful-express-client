@@ -14,18 +14,19 @@ const serializeFolder = folder => ({
 foldersRouter 
     .route('/')
     .get((req, res, next) => {
+        console.log(foldersRouter.get('/'));
         FoldersService.getAllFolders(
             req.app.get('db')
         )
-            .then(folders => {
-                res.json(folders.map(serializeFolder));
-            })
+      .then(folders => {
+        res.json(folders.map(serializeFolder));
+      })
             .catch(next);
     }) 
     .post(jsonParser, (req, res, next) => {
-        const { folder_name } = req.body;
+        const {folder_name: newFolderName} = req.body;
         console.log(folder_name);
-        const newFolder = { folder_name };
+        const newFolder = {folder_name: newFolderName};
         console.log(newFolder);
 
         for (const [key, value] of Object.entries(newFolder)) {
@@ -51,22 +52,23 @@ foldersRouter
 
 foldersRouter
     .route('/:folder_id')
-    .all((req, res, next) => {
-        FoldersService.getFolderById (
-            req.app.get('db'),
-            req.params.folder_id
-        )
-            .then(folder => {
-                if (!folder) {
-                    return res.status(404).json({
-                        error: {message: `Folder does not exist.`}
-                    });
-                }
-                res.folder = folder;
-                next();
-            })
-            .catch(next);
-    })
+//     .all((req, res, next) => {
+//         console.log('hello world');
+//         FoldersService.getById (
+//             req.app.get('db'),
+//             req.params.folder_id
+//         )
+//             .then(folder => {
+//                 if (!folder) {
+//                     return res.status(404).json({
+//                         error: {message: `Folder does not exist.`}
+//                     });
+//                 }
+//                 res.folder = folder;
+//                 next();
+//             })
+//             .catch(next);
+//     })
     .get((req, res, next) => {
         res.json(serializeFolder(res.folder));
     })
