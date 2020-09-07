@@ -7,3 +7,4 @@ INSERT INTO notes (name, folder_Id, content)
     ('Buy Pants', 5, 'Buy some black pants before the birthday party.'),
     ('Birthday Gift', 2, 'Buy a birthday gift for Morgana before the birthday party.')
 ;
+
