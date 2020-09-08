@@ -24,6 +24,7 @@ foldersRouter
             .catch(next);
     }) 
     .post(jsonParser, (req, res, next) => {
+        console.log('apple',req.body);
         const {folder_name: newFolderName} = req.body;
         console.log(folder_name);
         const newFolder = {folder_name: newFolderName};
@@ -52,23 +53,23 @@ foldersRouter
 
 foldersRouter
     .route('/:folder_id')
-//     .all((req, res, next) => {
-//         console.log('hello world');
-//         FoldersService.getById (
-//             req.app.get('db'),
-//             req.params.folder_id
-//         )
-//             .then(folder => {
-//                 if (!folder) {
-//                     return res.status(404).json({
-//                         error: {message: `Folder does not exist.`}
-//                     });
-//                 }
-//                 res.folder = folder;
-//                 next();
-//             })
-//             .catch(next);
-//     })
+    .all((req, res, next) => {
+        console.log('hello world');
+        FoldersService.getById (
+            req.app.get('db'),
+            req.params.folder_id
+        )
+            .then(folder => {
+                if (!folder) {
+                    return res.status(404).json({
+                        error: {message: `Folder does not exist.`}
+                    });
+                }
+                res.folder = folder;
+                next();
+            })
+            .catch(next);
+    })
     .get((req, res, next) => {
         res.json(serializeFolder(res.folder));
     })
