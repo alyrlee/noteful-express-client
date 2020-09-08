@@ -23,13 +23,45 @@ foldersRouter
       })
             .catch(next);
     }) 
+    // .post(jsonParser, (req, res, next) => {
+    //     console.log('apple',req.body);
+    //     console.log('goodbye');
+    //     const {folder_name: newFolderName} = req.body;
+    //     console.log(folder_name);
+    //     const newFolder = {folder_name: newFolderName};
+    //     console.log(newFolder);
+
+        // for (const [key, value] of Object.entries(newFolder)) {
+        //     if (value == null) {
+        //         return res.status(400).json({
+        //             error: {message: `Missing '${key}' in request body.`}
+        //         });
+        //     }
+        // }
+
+    //     FoldersService.insertFolder(
+    //         req.app.get('db'),
+    //         newFolder
+    //     )
+    //         .then(folder => {
+    //             res
+    //                 .status(201)
+    //                 .location(path.posix.join(req.originalUrl, `/${folder.id}`))
+    //                 .json(serializeFolder(folder));
+    //         })
+    //         .catch(next);
+    // });
+
+foldersRouter
+    .route('/:folder_id')
     .post(jsonParser, (req, res, next) => {
         console.log('apple',req.body);
+        console.log('goodbye');
         const {folder_name: newFolderName} = req.body;
         console.log(folder_name);
         const newFolder = {folder_name: newFolderName};
         console.log(newFolder);
-
+    
         for (const [key, value] of Object.entries(newFolder)) {
             if (value == null) {
                 return res.status(400).json({
@@ -37,7 +69,6 @@ foldersRouter
                 });
             }
         }
-
         FoldersService.insertFolder(
             req.app.get('db'),
             newFolder
@@ -49,10 +80,7 @@ foldersRouter
                     .json(serializeFolder(folder));
             })
             .catch(next);
-    });
-
-foldersRouter
-    .route('/:folder_id')
+    })
     .all((req, res, next) => {
         console.log('hello world');
         FoldersService.getById (
